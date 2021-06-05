@@ -9,10 +9,12 @@ import CardPage from './components/CardPage/CardPage';
 import Footer from './components/Footer/Footer';
 import PokemonSearch from './components/PokemonSearch/PokemonSearch';
 import PokemonPage from './components/PokemonPage/PokemonPage';
+import ScrollToTop from './wrappers/ScrollToTop';
 
 function App() {
   return (
     <Router>
+      <ScrollToTop>
       <Header />
       <PokemonSearch />
         <Switch>
@@ -24,6 +26,8 @@ function App() {
           </Route>
         </Switch>
       <Footer />
+      </ScrollToTop>
+      
     </Router>
   );
 }
