@@ -1,0 +1,53 @@
+.StatBarFlex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  color: white;
+  font-weight: 600;
+}
+
+.StatBarContainer {
+  width: 150px;
+  height: 20px;
+  background-color: #000;
+  position: relative;
+  border-radius: 10px;
+}
+
+.StatBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+  background-color: white;
+  height: 20px;
+}
+
+/* .StatBarMarker {
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  z-index: 5;
+  top: 0;
+  left: 25%;
+  border-right: salmon;
+  border: 0.5px solid salmon;
+}
+
+.StatBarMarker:nth-of-type(2) {
+  left: 50%;
+}
+.StatBarMarker:nth-of-type(3) {
+  left: 75%;
+} */
+
+
+.StatBarFlex span:first-of-type {
+  width: 60px;
+}
+
+.StatBarFlex span:last-of-type {
+  width: 30px;
+}

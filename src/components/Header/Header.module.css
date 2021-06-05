@@ -1,0 +1,16 @@
+.Header {
+  display: flex;
+  height: 60px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: grey;
+}
+
+.Header a {
+  height: 100%;
+}
+
+.PokeDexLogo {
+  height: 100%;
+}

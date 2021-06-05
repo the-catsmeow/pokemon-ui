@@ -1,0 +1,95 @@
+.CardContainer {
+  height: 330px;
+  width: 100%;
+  max-width: 300px;
+  position: relative;
+}
+
+.Card {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  border-radius: 10px;
+  backface-visibility: hidden;
+  display: flex; 
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  box-shadow: 0px 1px 21px -1px #000000;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 300ms ease-in;
+}
+.Front {
+  transform: rotateY(0);
+  z-index: 2;
+}
+
+.Back {
+  transform: rotateY(-180deg)
+}
+
+.Card.Flipped.Front {
+  transform: rotateY(180deg);
+}
+
+.Card.Flipped.Back {
+  transform: rotateY(0deg);
+}
+
+
+
+.NameType {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 36px;
+  color: white;
+  text-transform: capitalize;
+}
+
+.NameType > span:nth-child(2) {
+  font-size: 16px;
+  margin-top: 1rem;
+}
+
+.Id {
+  height: 40px;
+  width: 40px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0; 
+  left: 0;
+  border-top-left-radius: 10px;
+  border-bottom-right-radius: 2px;
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+}
+
+.ImageContainer {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.PokemonArtwork {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 110%;
+  width: 110%;
+  transform: translate(-50%, -50%);
+}
+
+.BackHeader {
+  color: #ffffff;
+  font-size: 20px;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+}
