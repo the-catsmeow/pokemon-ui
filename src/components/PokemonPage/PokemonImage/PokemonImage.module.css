@@ -1,0 +1,38 @@
+.PokeImgContainer {
+  display: flex;
+  position: relative;
+  width: 50%;
+  margin: 1rem;
+  border-radius: 30px;
+  background-color: honeydew;
+  box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.48);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.PokeImgCircle {
+  position: absolute;
+  background-color: rgba(0,0,0,0.1);
+  top: 50%;
+  left: 50%;
+  height: 350px;
+  width: 350px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.PokeImg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 400px;
+  width: 400px;
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 1100px) {
+  .PokeImgContainer {
+    height: 400px;
+  }
+}

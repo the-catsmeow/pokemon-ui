@@ -1,29 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const PokeListContext = React.createContext({
   pokemonList: [],
-  pokemon: {},
+  pokemonData: {},
   nextPage: null,
   isLoading: true,
   loadMoreData: () => {},
+  getSelectedPokemon: () => {},
   getPokemonfromSearch: () => {},
   setSelectedPokemon: () => {},
 });
 
 export const PokeListContextProvider = (props) => {
   const [pokemonList, setPokemonList] = useState([]);
-  const [pokemon, setPokemon] = useState({});
+  const [pokemonData, setPokemonData] = useState({});
   const [nextPage, setNextPage] = useState(
     'https://pokeapi.co/api/v2/pokemon?limit=50'
   );
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    loadData()
+    loadData();
   }, []);
 
-  const loadData = (dataPage = 'https://pokeapi.co/api/v2/pokemon?limit=50') => {
+  const loadData = (
+    dataPage = 'https://pokeapi.co/api/v2/pokemon?limit=50'
+  ) => {
     setIsLoading(true);
+
     let pokemonDataArr = [];
     fetch(dataPage).then((response) =>
       response.json().then((data) => {
@@ -46,7 +50,7 @@ export const PokeListContextProvider = (props) => {
         setIsLoading(false);
       })
     );
-  }
+  };
 
   const loadMoreData = () => {
     loadData(nextPage);
@@ -75,22 +79,68 @@ export const PokeListContextProvider = (props) => {
           })
       );
     } else {
-      loadData()
+      loadData();
     }
   };
 
   const setSelectedPokemon = (pokemonObj) => {
-    setPokemon(pokemonObj);
+    setPokemonData(pokemonObj);
+    fetch(pokemonObj.species.url).then((response) =>
+      response.json().then((data) => console.log(data))
+    );
   };
+
+  const getSelectedPokemon = useCallback(async (id) => {
+    setIsLoading(true);
+
+    let pokemonData = {
+      pokemon: {},
+      species: {},
+      versions_introduced: [],
+      evolution_chain: {},
+    };
+
+    let pokemonResponse = await fetch('https://pokeapi.co/api/v2/pokemon/' + id);
+    let pokemon = await pokemonResponse.json();
+    
+    pokemonData.pokemon = pokemon;
+
+    let speciesResponse = await fetch(pokemon.species.url);
+    let species = await speciesResponse.json();
+
+    pokemonData.species = species;
+
+    let evolutionChainResponse = await fetch(species.evolution_chain.url)
+    let evolutionChain = await evolutionChainResponse.json();
+
+    pokemonData.evolution_chain = evolutionChain;
+
+    let generationResponse = await fetch(species.generation.url);
+    let generation = await generationResponse.json();
+
+    let versions = []
+
+    Promise.allSettled(generation.version_groups.map(async (version_group, idx) => {
+      let versionsResponse = await fetch(version_group.url);
+      let versionsObj = await versionsResponse.json();
+      versions.push(...versionsObj.versions)
+    })).then(() => {
+      pokemonData.versions_introduced = versions;
+      setPokemonData(pokemonData);
+    })
+
+  
+  }, []);
 
   return (
     <PokeListContext.Provider
       value={{
         pokemonList: pokemonList,
-        pokemon: pokemon,
+        pokemonData: pokemonData,
         nextPage: nextPage,
         isLoading: isLoading,
         loadMoreData: loadMoreData,
+        getSelectedPokemon: getSelectedPokemon,
         getPokemonfromSearch: getPokemonfromSearch,
         setSelectedPokemon: setSelectedPokemon,
       }}

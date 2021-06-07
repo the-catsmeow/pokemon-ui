@@ -91,6 +91,40 @@ const pokemonTypeColor = {
   },
 }
 
+const gameColor = {
+  'red': '#FF1111',
+  'blue': '#1111FF',
+  'yellow': '#A68C21',
+  'gold': '#DAA520',
+  'silver': '#7D7D7D',
+  'crystal': '#4FD9FF',
+  'ruby': '#A00000',
+  'sapphire': '#0000A0',
+  'emerald': '#00A000',
+  'firered': '#FF7327',
+  'leafgreen': '#00DD00',
+  'diamond': '#6F6FA6',
+  'pearl': '#A66F6F',
+  'platinum': '#999999',
+  'heartgold': '#B69E00', 
+  'soulsilver': '#7D7D92',
+  'black': '#444444',
+  'white': '#929292',
+  'black-2': '#424B50',
+  'white-2': '#948687',
+  'x': '#025DA6',
+  'y': '#EA1A3E',
+  'omega-ruby': '#AB2813',
+  'alpha-sapphire': '#26649C',
+  'sun': '#F1912B',
+  'moon': '#5599CA',
+  'ultra-sun': '#E95B2B', 
+  'ultra-moon': '#226DB5',
+  'lets-go': '#D4924B',
+  'sword': '#00A1E9',
+  'shield': '#BF004F',
+}
+
 export const getPokemonTypeColor = (level, types) => {
   
   if (types.length === 2) {
@@ -98,7 +132,9 @@ export const getPokemonTypeColor = (level, types) => {
   } else {
     return {backgroundColor: pokemonTypeColor[types[0].type.name][level]};
   }
-
-  
 };
+
+export const getGameColor = (game) => {
+  return gameColor[game]
+}
 

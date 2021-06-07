@@ -16,7 +16,7 @@ const Card = ({ pokemon, setSelectedPokemon }) => {
   };
 
   const onClickHandler = (pokemonData) => {
-    setSelectedPokemon(pokemonData);
+    //setSelectedPokemon(pokemonData);
     return history.push('/pokemon/' + pokemonData.id);
   };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
 import './App.css';
 
@@ -21,8 +21,11 @@ function App() {
           <Route exact path="/">
             <CardPage />
           </Route>
-          <Route path="/pokemon/:id">
+          <Route exact path="/pokemon/:id">
             <PokemonPage />
+          </Route>
+          <Route path="*">
+            <Redirect to="/" />
           </Route>
         </Switch>
       <Footer />
