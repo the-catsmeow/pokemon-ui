@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './PokemonDetails.module.css';
 import { getPokemonTypeColor, getGameColor } from '../../../utility/utility';
 
-const PokemonDetails = ({ pokemon, versionsIntroduced }) => {
+const PokemonDetails = ({ pokemon, versionsIntroduced, species }) => {
   return (
     <div className={classes.DetailInfo}>
       <div className={classes.PokemonName}>{pokemon.name}</div>
@@ -25,8 +25,7 @@ const PokemonDetails = ({ pokemon, versionsIntroduced }) => {
       <div className={classes.DescriptionFlex}>
         <span className={classes.DescriptionHeader}>Description</span>
         <span>
-          The three horns that extend from its beak attest to its power. The
-          leader has the biggest horns.
+          {species.flavor_text_entries[0].flavor_text}
         </span>
       </div>
       <div className={classes.AttributesFlex}>
@@ -90,10 +89,9 @@ const PokemonDetails = ({ pokemon, versionsIntroduced }) => {
         </div>
       </div>
       <div className={classes.GamesFlexContainer}>
-        <span>Game Introduction</span>
+        <span>Games</span>
         <div className={classes.GamesFlex}>
           {versionsIntroduced.map((version, idx) => {
-            console.log(versionsIntroduced)
             return <span key={idx} style={{background: getGameColor(version.name)}}>{version.name}</span>
           })}
         </div>

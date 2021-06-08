@@ -3,44 +3,60 @@ import PokeListContext from '../../store/PokeListContext';
 import Card from '../Card/Card';
 import classes from './CardPage.module.css';
 
-const CardPage = (props) => {
-  const pokeCtx = useContext(PokeListContext);
+const CardPage = () => {
+  const { loadData, nextPage, isLoading, pokemonList } =
+    useContext(PokeListContext);
   const contentRef = useRef(null);
-  const [atBottom, setAtBottom] = useState(false);
+  const [loadingMoreData, setloadingMoreData] = useState(false);
 
   const isBottom = (ref) => {
     if (!ref.current) {
       return false;
     }
     if (ref.current.getBoundingClientRect().bottom <= window.innerHeight) {
-      setAtBottom(true);
+      return true;
     }
   };
 
   useEffect(() => {
-    
+    console.log('rendering CardPage');
+    async function fetchData() {
+      setloadingMoreData(true);
+      await loadData(nextPage);
+      setloadingMoreData(false);
+    }
     const onScroll = () => {
       isBottom(contentRef);
 
-      if (!pokeCtx.isLoading && atBottom) {
-        setAtBottom(false);
-        pokeCtx.loadMoreData()
+      if (!isLoading && isBottom(contentRef)) {
+        fetchData();
       }
     };
     document.addEventListener('scroll', onScroll);
     return () => {
       document.removeEventListener('scroll', onScroll);
     };
-  }, [pokeCtx, atBottom]);
+  }, [isLoading, loadData, nextPage]);
 
   return (
-    <div className={classes.CardPage} ref={contentRef}>
-      <React.Fragment>
-        {pokeCtx.pokemonList.map((pokemon, idx) => {
-          return <Card pokemon={pokemon.pokeData} setSelectedPokemon={ () => pokeCtx.setSelectedPokemon(pokemon.pokeData)} key={idx} />;
-        })}
-      </React.Fragment>
-    </div>
+    <React.Fragment>
+      <div className={classes.CardPage} ref={contentRef}>
+        {!isLoading || pokemonList.length !== 0 ? (
+          <React.Fragment>
+            {pokemonList.map((pokemon, idx) => {
+              return <Card pokemon={pokemon.pokeData} key={idx} />;
+            })}
+          </React.Fragment>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
+      {loadingMoreData ? (
+        <h2 style={{ display: 'block', fontWeight: '400' }}>
+          Loading more pokemon!
+        </h2>
+      ) : null}
+    </React.Fragment>
   );
 };
 

@@ -1,8 +1,14 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import React, { useEffect, useContext } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 
 import './App.css';
 
+import PokeListContext from './store/PokeListContext';
 
 import Header from './components/Header/Header';
 import CardPage from './components/CardPage/CardPage';
@@ -12,11 +18,17 @@ import PokemonPage from './components/PokemonPage/PokemonPage';
 import ScrollToTop from './wrappers/ScrollToTop';
 
 function App() {
+  const { loadData } = useContext(PokeListContext);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
   return (
     <Router>
       <ScrollToTop>
-      <Header />
-      <PokemonSearch />
+        <Header />
+        <PokemonSearch />
         <Switch>
           <Route exact path="/">
             <CardPage />
@@ -28,9 +40,8 @@ function App() {
             <Redirect to="/" />
           </Route>
         </Switch>
-      <Footer />
+        <Footer />
       </ScrollToTop>
-      
     </Router>
   );
 }

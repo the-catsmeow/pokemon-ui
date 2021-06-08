@@ -102,10 +102,11 @@
 .GamesFlex span {
   margin: 0.5rem;
   padding: 0.25rem 1rem;
-  font-weight: 500;
+  font-weight: 300;
   font-size: 18px;
   color: white;
   background-color: royalblue;
+  text-transform: capitalize;
   border-radius: 20px;
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5)
 }
