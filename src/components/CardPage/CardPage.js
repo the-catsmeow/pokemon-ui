@@ -19,7 +19,6 @@ const CardPage = () => {
   };
 
   useEffect(() => {
-    console.log('rendering CardPage');
     async function fetchData() {
       setloadingMoreData(true);
       await loadData(nextPage);

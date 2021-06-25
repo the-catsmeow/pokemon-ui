@@ -31,8 +31,13 @@
   transform: translate(-50%, -50%);
 }
 
+.DesktopOnly {
+  display: flex;
+}
+
+
 @media (max-width: 1100px) {
-  .PokeImgContainer {
-    height: 400px;
+  .DesktopOnly {
+    display: none;
   }
 }

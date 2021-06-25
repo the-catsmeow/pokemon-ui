@@ -86,54 +86,91 @@ export const PokeListContextProvider = (props) => {
     }
   };
 
-  const getSelectedPokemon = useCallback(async (id) => {
-    setIsLoading(true);
-
-    let pokemonData = {
-      pokemon: {},
-      species: {},
-      versions_introduced: [],
-      evolution_chain: {},
-    };
-
-    let pokemonResponse = await fetch(
-      'https://pokeapi.co/api/v2/pokemon/' + id
-    );
-    let pokemon = await pokemonResponse.json();
-
-    pokemonData.pokemon = pokemon;
-
-    let speciesResponse = await fetch(pokemon.species.url);
-    let species = await speciesResponse.json();
-
-    pokemonData.species = species;
-
-    let evolutionChainResponse = await fetch(species.evolution_chain.url);
-    let evolutionChain = await evolutionChainResponse.json();
-
-    pokemonData.evolution_chain = evolutionChain;
-
-    let generationResponse = await fetch(species.generation.url);
-    let generation = await generationResponse.json();
-
-    let versions = [];
-
-    Promise.allSettled(
-      generation.version_groups.map(async (version_group, idx) => {
-        let versionsResponse = await fetch(version_group.url);
-        let versionsObj = await versionsResponse.json();
-        versions.push(...versionsObj.versions);
-      })
-    )
-      .then(() => {
-        pokemonData.versions_introduced = versions;
-        setPokemonData(pokemonData);
-      })
-      .finally(() => {
-        console.log('here');
-        setIsLoading(false);
-      });
+  const getEvolvesToSpecies = useCallback((evolveObject, evolutionSpecies) => {
+    if (evolveObject.evolves_to.length === 0) {
+      return evolutionSpecies;
+    } else {
+      evolutionSpecies.push(evolveObject.evolves_to[0].species);
+      let newEvolveObject = evolveObject.evolves_to[0];
+      return getEvolvesToSpecies(newEvolveObject, evolutionSpecies);
+    }
   }, []);
+
+  const getSelectedPokemon = useCallback(
+    async (id) => {
+      setIsLoading(true);
+
+      let pokemonData = {
+        pokemon: {},
+        species: {},
+        versions_introduced: [],
+        evolution_chain: [],
+      };
+
+      let pokemonResponse = await fetch(
+        'https://pokeapi.co/api/v2/pokemon/' + id
+      );
+      let pokemon = await pokemonResponse.json();
+
+      pokemonData.pokemon = pokemon;
+
+      let speciesResponse = await fetch(pokemon.species.url);
+      let species = await speciesResponse.json();
+
+      pokemonData.species = species;
+
+      let evolutionChainResponse = await fetch(species.evolution_chain.url);
+      let evolutionChainObject = await evolutionChainResponse.json();
+
+      let evolutionChainSpecies = getEvolvesToSpecies(
+        evolutionChainObject.chain,
+        [evolutionChainObject.chain.species]
+      );
+
+      let generationResponse = await fetch(species.generation.url);
+      let generation = await generationResponse.json();
+
+      let versions = [];
+
+      //TODO: Refactor this to avoid then chaining. works for now so shrug
+      Promise.allSettled(
+        evolutionChainSpecies.map(async (specie) => {
+          let specieResponse = await fetch(specie.url);
+          let specieObj = await specieResponse.json();
+
+          let pokemonEvolveResponse = await fetch(
+            'https://pokeapi.co/api/v2/pokemon/' + specieObj.id
+          );
+          let pokemonEvolveObj = await pokemonEvolveResponse.json();
+
+          return {
+            name: specie.name,
+            url: specie.url,
+            sprite:
+              pokemonEvolveObj.sprites.other['official-artwork'].front_default,
+          };
+        })
+      ).then((evolveChain) => {
+        pokemonData.evolution_chain = evolveChain.map((e) => e.value);
+
+        Promise.allSettled(
+          generation.version_groups.map(async (version_group) => {
+            let versionsResponse = await fetch(version_group.url);
+            let versionsObj = await versionsResponse.json();
+            versions.push(...versionsObj.versions);
+          })
+        )
+          .then(() => {
+            pokemonData.versions_introduced = versions;
+            setPokemonData(pokemonData);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      });
+    },
+    [getEvolvesToSpecies]
+  );
 
   return (
     <PokeListContext.Provider

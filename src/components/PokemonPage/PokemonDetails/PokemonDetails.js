@@ -1,32 +1,39 @@
 import React from 'react';
 import classes from './PokemonDetails.module.css';
 import { getPokemonTypeColor, getGameColor } from '../../../utility/utility';
+import PokemonImage from '../PokemonImage/PokemonImage';
 
 const PokemonDetails = ({ pokemon, versionsIntroduced, species }) => {
   return (
     <div className={classes.DetailInfo}>
-      <div className={classes.PokemonName}>{pokemon.name}</div>
-      <div className={classes.TypeContainer}>
-        {pokemon.types.map((typeObj, idx) => {
-          return (
-            <div
-              className={classes.Type}
-              style={getPokemonTypeColor(
-                'light',
-                pokemon.types.slice(idx, idx + 1)
-              )}
-              key={idx}
-            >
-              {typeObj.type.name}
-            </div>
-          );
-        })}
+      <div className={classes.SmallDevicePictureContainer}>
+        <div className={classes.SmallPicture}>
+        <PokemonImage pokemon={pokemon} styles={{'height': '200px', 'width': '200px'}}/>
+        </div>
+        <div className={classes.NameTypeFlex}>
+          <div className={classes.PokemonName}>{pokemon.name}</div>
+          <div className={classes.TypeContainer}>
+            {pokemon.types.map((typeObj, idx) => {
+              return (
+                <div
+                  className={classes.Type}
+                  style={getPokemonTypeColor(
+                    'light',
+                    pokemon.types.slice(idx, idx + 1)
+                  )}
+                  key={idx}
+                >
+                  {typeObj.type.name}
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
+
       <div className={classes.DescriptionFlex}>
         <span className={classes.DescriptionHeader}>Description</span>
-        <span>
-          {species.flavor_text_entries[0].flavor_text}
-        </span>
+        <span>{species.flavor_text_entries[0].flavor_text}</span>
       </div>
       <div className={classes.AttributesFlex}>
         <div className={classes.AttributesGrid}>
@@ -92,7 +99,14 @@ const PokemonDetails = ({ pokemon, versionsIntroduced, species }) => {
         <span>Games</span>
         <div className={classes.GamesFlex}>
           {versionsIntroduced.map((version, idx) => {
-            return <span key={idx} style={{background: getGameColor(version.name)}}>{version.name}</span>
+            return (
+              <span
+                key={idx}
+                style={{ background: getGameColor(version.name) }}
+              >
+                {version.name}
+              </span>
+            );
           })}
         </div>
       </div>

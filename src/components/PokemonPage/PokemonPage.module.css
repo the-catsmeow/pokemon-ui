@@ -16,6 +16,10 @@
   width: 100%;
 }
 
+.mobile-hide {
+  display: flex;
+}
+
 
 @media (max-width: 1100px) {
   .InfoFlex {
